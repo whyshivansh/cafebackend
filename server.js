@@ -2,27 +2,38 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRouter from "./routes/userRoute.js";
+
 dotenv.config();
+
 const app = express();
 app.use(express.json());
 app.use(express.static("public"));
+
 const dbuser = encodeURIComponent(process.env.DBUSER);
 const dbpass = encodeURIComponent(process.env.DBPASS);
+const dbname = process.env.DBNAME || "merncafe";
 
-// mongoose.connect(`mongodb://localhost:27017/merncafe`).then(() => {
-//   app.listen(8080, () => {
-//     console.log("Server started");
-//   });
-// });
 
- await mongoose
-  .connect(
-    'mongodb+srv://shivanshsaxena1310:TFitjt7qdFsqDWPd@cafe-backend.wbrgj7y.mongodb.net/'
-  )
-  .then(() => {
-    app.listen(8080, () => {
-      console.log("Server started");
+const mongoURI = `mongodb+srv://${dbuser}:${dbpass}@${process.env.DBCLUSTER}/${dbname}?retryWrites=true&w=majority`;
+
+const PORT = process.env.PORT || 8080;
+
+async function startServer() {
+  try {
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-  });
 
+    console.log("MongoDB connected");
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to connect to MongoDB:", err.message);
+    process.exit(1);
+  }
+}
+
+startServer();
 app.use("/api/users", userRouter);
