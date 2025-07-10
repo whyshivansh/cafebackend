@@ -14,13 +14,12 @@ const dbpass = encodeURIComponent(process.env.DBPASS);
 const dbname = process.env.DBNAME || "merncafe";
 
 
-const mongoURI = `mongodb+srv://${dbuser}:${dbpass}@${process.env.DBCLUSTER}/${dbname}?retryWrites=true&w=majority`;
 
 const PORT = process.env.PORT || 8080;
 
 async function startServer() {
   try {
-    await mongoose.connect(mongoURI, {
+    await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
