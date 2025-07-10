@@ -2,10 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRouter from "./routes/userRoute.js";
+import cors from "cors"
 dotenv.config();
 const app = express();
+app.use(cors())
 app.use(express.json());
-// app.use(express.static("public"));
 const dbuser = encodeURIComponent(process.env.DBUSER);
 const dbpass = encodeURIComponent(process.env.DBPASS);
 
