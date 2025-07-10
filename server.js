@@ -15,7 +15,7 @@ const dbpass = encodeURIComponent(process.env.DBPASS);
 //   });
 // });
 
-mongoose
+ await mongoose
   .connect(
     'mongodb+srv://shivanshsaxena1310:TFitjt7qdFsqDWPd@cafe-backend.wbrgj7y.mongodb.net/'
   )
