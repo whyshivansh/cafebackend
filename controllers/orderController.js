@@ -22,4 +22,29 @@ const showOrders = async (req, res) => {
   }
 };
 
-export { newOrder,showOrders };
+const showAllOrders = async (req, res) => {
+  try {
+    const result = await orderModel.find();
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+const updateOrder = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { status } = req.body;
+    const result = await orderModel.updateOne(
+      { _id: id },
+      { $set: { status } }
+    );
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export { newOrder, showOrders, showAllOrders, updateOrder };
