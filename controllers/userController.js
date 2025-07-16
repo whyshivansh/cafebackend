@@ -56,7 +56,7 @@ const login = async (req, res) => {
       const isMatch = await bcrypt.compare(password, existingUser.password);
       if (isMatch) {
         const userObj = {
-          id:existingUser._id,
+          id: existingUser._id,
           firstName: existingUser.firstName,
           email: existingUser.email,
           role: existingUser.role,
@@ -108,15 +108,13 @@ const addUser = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const id = req.params.id;
-    const { firstName, lastName, email, password } = req.body;
-    const hashedpwd = await bcrypt.hash(password, 10);
-    const userObj = {
-      firstName,
-      lastName,
-      email,
-      password: hashedpwd,
-    };
-    const result = await userModel.findByIdAndUpdate(id, userObj);
+    // const { firstName, lastName, email, password } = req.body;
+    const body = req.body;
+    if (body.password) {
+      const hashedpwd = await bcrypt.hash(password, 10);
+      body.password = hashedpwd;
+    }
+    const result = await userModel.findByIdAndUpdate(id, body);
     res.status(200).json(result);
   } catch (err) {
     console.log(err);
@@ -128,13 +126,15 @@ const showUsers = async (req, res) => {
   try {
     const { page = 1, limit = 3, search = "" } = req.query;
     const skip = (page - 1) * limit;
-    const count = await userModel.countDocuments({ firstName: { $regex: search, $options: "i" } });
+    const count = await userModel.countDocuments({
+      firstName: { $regex: search, $options: "i" },
+    });
     const total = Math.ceil(count / limit);
     const users = await userModel
       .find({ firstName: { $regex: search, $options: "i" } })
       .skip(skip)
       .limit(limit)
-      .sort({updatedAt:-1})
+      .sort({ updatedAt: -1 });
     res.status(200).json({ users, total });
   } catch (err) {
     console.log(err);
