@@ -24,8 +24,12 @@ const showOrders = async (req, res) => {
 
 const showAllOrders = async (req, res) => {
   try {
-    const result = await orderModel.find();
-    res.status(200).json(result);
+    const { status = "", page = 1, limit = 5 } = req.query;
+    const skip = (page - 1) * limit;
+    const count = await orderModel.countDocuments();
+    const total = Math.ceil(count / limit);
+    const result = await orderModel.find({ status: { $regex: status } });
+    res.status(200).json({ orders:result, total });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Something went wrong" });
