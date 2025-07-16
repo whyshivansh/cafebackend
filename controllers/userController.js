@@ -1,5 +1,6 @@
 import userModel from "../models/userModel.js";
 import bcrypt from "bcrypt";
+import {ObjectId} from "mongoose"
 import jwt from "jsonwebtoken";
 const SECRET = "something";
 const profile = async (req, res) => {
@@ -107,7 +108,8 @@ const addUser = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.id
+    // console.log(id)
     // const { firstName, lastName, email, password } = req.body;
     const body = req.body;
     if (body.password) {
