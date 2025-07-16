@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRouter from "./routes/userRoute.js";
 import productRouter from "./routes/productRoute.js";
+import orderRouter from "./routes/orderRoute.js"
 import cors from "cors";
 dotenv.config();
 const app = express();
@@ -29,3 +30,4 @@ mongoose.connect(`mongodb://localhost:27017/merncafe`).then(() => {
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
+app.use("/api/orders", orderRouter)
