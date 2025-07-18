@@ -20,7 +20,7 @@ const dbpass = encodeURIComponent(process.env.DBPASS);
 
 mongoose
   .connect(
-    `mongodb+srv://${dbuser}:${dbpass}@cluster0.qjxhv.mongodb.net/merncafe?retryWrites=true&w=majority&appName=Cluster0`
+    `mongodb+srv://${dbuser}:${dbpass}@cafe-backend.wbrgj7y.mongodb.net/`
   )
   .then(() => {
     app.listen(8080, () => {
@@ -31,4 +31,3 @@ mongoose
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter)
-//hello World
